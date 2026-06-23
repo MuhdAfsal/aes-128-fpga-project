@@ -6,12 +6,12 @@ We will connect a custom Verilog AES core to the Zynq ARM processor over the AXI
 
 ---
 
-## Code Files Generated
+## Repository Directory Structure
 
-Your project files are located in `C:/Users/ashiq/.gemini/antigravity/scratch/aes_zybo_project/`:
-- **Hardware HDL Core**: [hdl/aes_128_core.v](file:///C:/Users/ashiq/.gemini/antigravity/scratch/aes_zybo_project/hdl/aes_128_core.v) (Standard iterative AES-128 engine)
-- **AXI-Lite Slave Wrapper**: [hdl/aes_axi_lite.v](file:///C:/Users/ashiq/.gemini/antigravity/scratch/aes_zybo_project/hdl/aes_axi_lite.v) (AXI4-Lite register mapping)
-- **Vitis Software**: [software/main.c](file:///C:/Users/ashiq/.gemini/antigravity/scratch/aes_zybo_project/software/main.c) (C application to test the accelerator)
+The project files are structured as follows:
+- **Hardware HDL Core**: [hdl/aes_128_core.v](hdl/aes_128_core.v) (Standard iterative AES-128 engine)
+- **AXI-Lite Slave Wrapper**: [hdl/aes_axi_lite.v](hdl/aes_axi_lite.v) (AXI4-Lite register mapping)
+- **Vitis Software**: [software/main.c](software/main.c) (C application to test the accelerator)
 
 ---
 
@@ -67,10 +67,10 @@ Now we replace the auto-generated templates in the temporary Edit IP project wit
    * `aes_coprocessor_v1_0.v` (Top wrapper)
    * `aes_coprocessor_v1_0_S00_AXI.v` (AXI interface)
 2. Double click `aes_coprocessor_v1_0_S00_AXI.v` to open it.
-3. Replace its entire contents with the code from **[aes_axi_lite.v](file:///C:/Users/ashiq/.gemini/antigravity/scratch/aes_zybo_project/hdl/aes_axi_lite.v)**. Rename the module inside the file to match the wizard's expected name (e.g. `aes_coprocessor_v1_0_S00_AXI` if it is different).
+3. Replace its entire contents with the code from **[hdl/aes_axi_lite.v](hdl/aes_axi_lite.v)**. Rename the module inside the file to match the wizard's expected name (e.g. `aes_coprocessor_v1_0_S00_AXI` if it is different).
 4. Go to `File -> Add Sources...` (or click `+` in the Sources panel).
    * Select **Add or create design sources** and click **Next**.
-   * Click **Add Files** and select **[aes_128_core.v](file:///C:/Users/ashiq/.gemini/antigravity/scratch/aes_zybo_project/hdl/aes_128_core.v)** from your local drive.
+   * Click **Add Files** and select **[hdl/aes_128_core.v](hdl/aes_128_core.v)** from your local drive.
    * Make sure **Copy sources into IP directory** is checked. Click **Finish**.
 5. Double click `aes_coprocessor_v1_0.v` (the top-level wrapper). We need to hook up the sub-module correctly. Since we changed the address range, replace the template instantiation inside with your new module. In fact, you can just clean up `aes_coprocessor_v1_0.v` so it directly instantiates `aes_coprocessor_v1_0_S00_AXI` and propagates all signals.
 6. Open the **Package IP** tab in the main editor pane.
@@ -135,7 +135,7 @@ Now we tie the processor and our new IP together in a visual schematic.
 
 ### STEP 7: Import C Code and Run
 1. In Vitis, expand your application project (e.g., `aes_app`) and locate the `src` folder.
-2. Right-click the `src` folder and select **Import Sources...** or simply copy and paste the generated **[main.c](file:///C:/Users/ashiq/.gemini/antigravity/scratch/aes_zybo_project/software/main.c)** file into it.
+2. Right-click the `src` folder and select **Import Sources...** or simply copy and paste the generated **[software/main.c](software/main.c)** file into it.
 3. Build the application project by clicking the **Hammer** icon.
 4. **Connect your Zybo Z7-10 board**:
    * Connect the micro-USB cable from the Zybo's PROG/UART port to your PC.

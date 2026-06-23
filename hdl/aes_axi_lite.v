@@ -1,6 +1,6 @@
 `timescale 1ns / 1ps
 //////////////////////////////////////////////////////////////////////////////////
-// Engineer: Antigravity
+// Engineer: Muhammed Afsal
 // 
 // Create Date: 2026/06/11
 // Design Name: AES-128 AXI-Lite Peripheral
