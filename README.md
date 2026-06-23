@@ -148,3 +148,54 @@ Now we tie the processor and our new IP together in a visual schematic.
    * Right-click your application project (`aes_app`).
    * Select **Run As -> Launch Hardware (Single Application Debug)**.
    * Vitis will program the FPGA fabric with the bitstream, load the C code into the Zynq processor, run the code, and print the results to your terminal console!
+
+---
+
+## Hardware Implementation & Verification Results
+
+### 1. Zynq SoC Block Design Schematic
+The hardware layout connects the custom `aes_coprocessor_0` register interface to the `processing_system7_0` (Zynq ARM Core) using the high-performance `AXI SmartConnect` (`axi_smc`) interconnect. The `rst_ps7_0_50M` block handles synchronization of resets with the processor clock.
+
+![AES Zynq Block Design](images/block_design.png)
+
+### 2. Resource Utilization
+The resource utilization statistics show a lightweight implementation footprint on the Zybo Z7-10 (xc7z010clg400-1):
+
+| Resource | Used | Available | Utilization % |
+| :--- | :--- | :--- | :--- |
+| **Slice LUTs** | 2,116 | 17,600 | 12.02 % |
+| **Slice Registers** | 1,417 | 35,200 | 4.03 % |
+| **F7 Muxes** | 298 | 8,800 | 3.39 % |
+| **F8 Muxes** | 69 | 4,400 | 1.57 % |
+| **Bonded IOBs** | 130 | 130 | 100.00 % |
+| **BUFGCTRL** | 1 | 32 | 3.13 % |
+
+![Vivado Resource Utilization Report](images/utilization.png)
+
+### 3. Timing Summary
+All user-specified timing constraints were met at the target frequency (50 MHz clock):
+
+* **Worst Negative Slack (WNS):** `3.347 ns` (Met)
+* **Worst Hold Slack (WHS):** `0.045 ns` (Met)
+* **Worst Pulse Width Slack (WPWS):** `4.020 ns` (Met)
+* **Total Negative Slack (TNS):** `0.000 ns`
+* **Total Hold Slack (THS):** `0.000 ns`
+
+![Vivado Design Timing Summary](images/timing_summary.png)
+
+### 4. Software Run & Acceleration Verification
+When running the software application in Vitis, the system initiates the encryption core, writes the key and plaintext to the memory-mapped AXI registers, triggers execution, and compares the resulting ciphertext with the golden standard AES vectors.
+
+```
+--- AES-128 Encryption Accelerator Test on Zybo Z7-10 ---
+Using Custom IP base address: 0x43C00000
+Input Key       : 2B7E1516 28AED2A6 ABF71588 09CF4F3C
+Input Plaintext : 3243F6A8 885A308D 313198A2 F0370734
+Triggering AES hardware encryption core...
+Hardware Cipher : 3925841D 02DC09FB DC118597 196A0B32
+Expected Cipher : 3925841D 02DC09FB DC118597 196A0B32
+[SUCCESS] AES hardware acceleration verified successfully!
+--- AES Accelerator Test Completed ---
+```
+
+![Vitis Terminal Execution Verification Output](images/vitis_verification.png)
